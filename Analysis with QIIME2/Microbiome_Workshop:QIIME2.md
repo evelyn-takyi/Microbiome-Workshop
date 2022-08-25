@@ -61,7 +61,7 @@ ET106_S6	$PWD/00_RAW_gz/ET106_S6_L001_R1_001.fastq.gz	forward
 ET106_S6	$PWD/00_RAW_gz/ET106_S6_L001_R2_001.fastq.gz	reverse
 ET107_S7	$PWD/00_RAW_gz/ET107_S7_L001_R1_001.fastq.gz	forward
 ```		
-	B. Metatdata file :saved as a text file(
+	B. Metatdata file :saved as a text file that contains information about your samples. An example is below
 ```
  #SampleID	SampleName	Trial	Treatment   TankLocation  SampleType
 ET201_S1	VIMS3_CONA_1	T3	 C		      A	         larvae
