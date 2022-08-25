@@ -18,14 +18,14 @@ C. Before coming to the workshop, read these papers:
 ```
 - This workshop provides a concise introduction to conducting the statistical analysis and visualising microbiome data in R based on metabarcoding and highthroughput sequencing.
 - No prior experience with microbiome data or R is required.
-- The analysis are starting from sampling to data visualization
+- The analysis is starting with processing raw sequencing data to data visualization.
 ```
 ### Agenda
 ```
 1. Introduction to microbiome data analysis.(20minutes Powerpoint presentation)
 2. Introduction to data analysis in QIIME2
 3. Hands on practice with data analysis and visualization in R
-``
+```
 ### Software used in this workshop
 ```
 - QIIME2
