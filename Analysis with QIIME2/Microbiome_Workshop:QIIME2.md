@@ -312,7 +312,7 @@ qiime tools export --input-path taxonomy-as-metadata.qzv  --output-path taxonomy
 
 ### Other reference materials for microbiome data analysis
 ```
-https://usda-ars-gbru.github.io/Microbiome-workshop/tutorials/qiime2/
+(https://usda-ars-gbru.github.io/Microbiome-workshop/tutorials/qiime2/)
 https://docs.qiime2.org
 Especially: https://docs.qiime2.org/2019.7/tutorials/atacama-soils/
 https://www.mothur.org/wiki/MiSeq_SOP
