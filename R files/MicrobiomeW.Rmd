@@ -1,8 +1,17 @@
----
-title: "Microbiome_workshop"
-output: pdf_document
----
+## Set your working directory in R
+```
+setwd("~/Desktop/microbiome/")
+```
+## Installing Packages
 
+```
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+
+BiocManager::install(c("DESeq2","readxl","openxlsx","vegan","ggplot2","dplyr","tidyverse","phyloseq","gridExtra","grid","ggpubr","agricolae","microbiome","MicrobeR","microbiomeSeq","apeglm"))
+```
+
+### Load the following libraries of the packages
 ```{r setup, include=FALSE}
 library(DESeq2)
 library(readxl)
@@ -29,6 +38,24 @@ library(coin)
 library(MicrobiotaProcess)
 ```
 
+#### Files to download in R
+ A. ASV count table
+ B. Taxonomy metadata 
+ C. Sample Metatable 
+ 
+ ## Reading data into R
+### The format of microbiome data
+```
+Most pipelines for processing high-throughput amplicon data, such as mothur, QIIME, and dada2, result in a matrix of read counts.
+One dimension of this matrix (i.e. the rows or the columns) consists of OTUs or ASVs.The other dimension consists of samples.
+Different tools will expect/output different orientations of the matrix, but, in our case, columns are samples and rows are OTUs.
+Sometimes the OTU data and the abundance matrix are two separate tables. There is usually another table with sample information in rows.
+This makes it easy to add lots of additional sample data columns that can be used to subset the data. Each sample and OTU will have an unique ID.
+```
+
+### Load all the ASV counttables and metatable, taxonomy table and combine all into one big table in R
+
+###### Load ASV Count table
 ```{r}
 abund_table <-read.xlsx("~/Desktop/Microbiome_files.xlsx", sheet="ASV", rowNames = TRUE)
 abund_table<- as.data.frame(t(abund_table))
@@ -37,7 +64,7 @@ rownames(abund_table1) <- NULL
 abun_count <-gather(abund_table1, FeatureID, Value, ASV_1:ASV_4155)
 ```
 
-
+###### Load Metatable
 ```{r}
 meta_table <-read.xlsx("~/Desktop/Microbiome_files.xlsx", sheet="meta_table", rowNames = TRUE)
 meta_table1 <- cbind(SampleID = rownames(meta_table ), meta_table)
@@ -47,7 +74,7 @@ meta_table1$Treatment <- factor(meta_table1$Treatment, levels=unique(meta_table1
 meta_table1$ProjectName <- as.character(meta_table1$ProjectName)
 
 ```
-
+###### Load Taxonomy table
 ```{r}
 taxa1<-read_excel("~/Desktop/Microbiome_files.xlsx", sheet = "metadata")
 tax_table1 <-do.call(rbind, strsplit(as.character(taxa1$Taxon),";"))
@@ -57,6 +84,37 @@ taxa_A <- as.data.frame(tax_table1)
 taxa_A1  <- cbind(FeatureID = rownames(taxa_A ), taxa_A)
 rownames(taxa_A1) <- NULL
 ```
+
+## Joinn all data
+```
+M1count<-full_join(taxa_A1, abun_count)
+combine_b <-full_join(M1count,meta_table1)
+```
+###### Basic Statistics
+```{r}
+newdata <-combine_b %>% group_by(SampleID,FeatureID) %>% summarise(Value=mean(Value))
+newdata1 <-spread(newdata, SampleID, Value) ##spread the data into a wide format
+x<-dim(newdata1)[2] # number of columns
+newdata1[2:x] <- lapply(newdata1[2:x], function(x) as.numeric(as.character(x)))
+seq_total<-apply(newdata1[2:x],2,sum) #number of sequences per sample
+ASV_count<-colSums(newdata1[2:x]>0) # OTUs per sample
+ASV_single<-colSums(newdata1[2:x]==1) # OTUs with only 1 seq
+ASV_double<-colSums(newdata1[2:x]==2) # OTUs that have only 2 seqs
+ASV_true<-colSums(newdata1[2:x]>2) # Number of OTUs with >2 seqs
+dataset_info<-data.frame(seq_total,ASV_count)
+
+#add the rownames as a proper column
+dataset_info <- cbind(SampleID = rownames(dataset_info), dataset_info)
+dataset_info
+rownames(dataset_info) <- NULL
+#combine the metadata with dataset_info
+data_meta <- meta_table1 [c(1,2,4)]
+basic_stat <- full_join(data_meta, dataset_info)
+basic_stat
+#write.csv(basic_stat,"basic_stat.csv")
+```
+
+#### Convert data to a phyloseq object
 ```{r}
 Abund_table<- as.data.frame(t(abund_table))
 A2 <-as.matrix(Abund_table)
@@ -77,7 +135,8 @@ sample_info_tab_phy <- sample_data(meta_table2)
 All_S4 <-phyloseq(count_tab_pyA, tax_tab_phy, sample_info_tab_phy)
 All_S4
 ```
-#### Data Filtering
+
+### Data Filtering
 ##### Step1. Evaluate Amplicon Sequence Variants (ASV) summary statistics
 #####  Remove taxa with zero counts 
 
@@ -85,7 +144,6 @@ All_S4
 summary(taxa_sums(All_S4))
 phy <- prune_taxa(taxa_sums(All_S4) > 0, All_S4)
 ```
-
 
 ```{r}
 # Create a new data frame of the sorted row sums, a column of sorted values from 1 to the total number of individuals/counts for each ASV and a categorical variable stating these are all ASVs.
@@ -380,19 +438,6 @@ theme(axis.text.x = element_text(size="12", color="black"), axis.title.x.bottom 
 theme(axis.text.x.top= element_text(face="bold",size="12", color="black"))+theme(plot.title=element_text(size = 16, face = "bold", hjust = 0.5))
 NMDSplot_Hatchery
 ```
-#### Join all the data together into a one file
-```{r}
-sample_sum_df <- data.frame(sum = sample_sums(ps2 ))
-sum(sample_sum_df[, 'sum'])
-
-Sample_reads <- cbind(SampleID = rownames(sample_sum_df), sample_sum_df)
-rownames(Sample_reads) <- NULL
-
-#Join all the data
-Meta_T <-full_join(meta_table1, Sample_reads)
-M1count<-full_join(taxa_A1, abun_count)
-combine_b <-full_join(M1count,Meta_T)
-```
 
 #### Abundance plot
 ##### Phylum Abundance
@@ -571,45 +616,6 @@ read_legend<-g_legend(ggplot(Meta_T,aes(SampleID,sum, fill=Treatment))+
 Order_plot1 <-grid.arrange(Read_plot, read_legend, Order_plot, ASV_legend, nrow=2, ncol=2, heights=c(1,2.5), widths=c(9,3.5))
 
 
-```
 
 
-```{r}
-
-```
-
-```{r}
-newdata <-combine_b %>% group_by(SampleID,FeatureID) %>% summarise(Value=mean(Value))
-newdata1 <-spread(newdata, SampleID, Value) ##spread the data into a wide format
-x<-dim(newdata1)[2] # number of columns
-newdata1[2:x] <- lapply(newdata1[2:x], function(x) as.numeric(as.character(x)))
-seq_total<-apply(newdata1[2:x],2,sum) #number of sequences per sample
-ASV_count<-colSums(newdata1[2:x]>0) # OTUs per sample
-ASV_single<-colSums(newdata1[2:x]==1) # OTUs with only 1 seq
-ASV_double<-colSums(newdata1[2:x]==2) # OTUs that have only 2 seqs
-ASV_true<-colSums(newdata1[2:x]>2) # Number of OTUs with >2 seqs
-dataset_info<-data.frame(seq_total,ASV_count)
-
-#add the rownames as a proper column
-dataset_info <- cbind(SampleID = rownames(dataset_info), dataset_info)
-dataset_info
-rownames(dataset_info) <- NULL
-#combine the metadata with dataset_info
-data_meta <- meta_table1 [c(1,2,4)]
-basic_stat <- full_join(data_meta, dataset_info)
-basic_stat
-#write.csv(basic_stat,"basic_stat.csv")
-```
-```{r}
-Table1 <- otu_table(justbacteria)
-SD <- sample_data(justbacteria) %>%
-    data.frame() %>%
-    select("Treatment","Hatchery", "Year","Month","Season","season","ProjectName", "Num","Type", "Name","All","TankLocation","Location","Env") %>%
-    mutate_if(is.factor,as.character)
-SD1 <- cbind(SampleID = rownames(SD ), SD)
-rownames(SD1 ) <- NULL
-
-Table1
-SD
-```
 
