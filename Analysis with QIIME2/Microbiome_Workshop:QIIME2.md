@@ -9,12 +9,12 @@ Some examples include Mothur, Phyloseq, Dada2, UPARSE and QIIME 1 and QIIME 2.
 ###  Raw sequencing dataset (Can be in the form of paired end or single end sequences)
 
 A. Single end: Sequence base pairs are generated from only one direction of the fragment. 
+
 B. Paired-end Sequence base pairs are generated from one direction of the fragment(forward read) and then starts another round of reading from the opposite end of the fragment(Reverse read).
 
 ## An example of a paired end sequencing
-RS412_S16_L001_*R1*_001.fastq.gz  RS412_S16_L001_R2_001.fastq.gz
-```
-Forward read
+
+#### Forward read: RS412_S16_L001_R1_001.fastq.gz
 ```
 @M00763:337:000000000-CLFHY:1:1101:16324:1690 1:N:0:AAGAGGCA+TTATGCGA
 CAACGCGAAGAACCTTACCAGGGTTTGACATCCTGCGAATCTCCTGGAAACGGGAGAGTGCCTTCGGGAACGCAGT
@@ -22,7 +22,7 @@ CAACGCGAAGAACCTTACCAGGGTTTGACATCCTGCGAATCTCCTGGAAACGGGAGAGTGCCTTCGGGAACGCAGT
 -8AC?@CEEEGFGGDGFE?EDDF;C:BEFGCF@EEGGGGGGFDGGFFGGGFGGGGGGG<EFGFCFGGGGGGGGGGC
 ```
 
-####  Reverse read
+####  Reverse read:  RS412_S16_L001_R2_001.fastq.gz
 ```
 @M00763:337:000000000-CLFHY:1:1101:15285:4581 1:N:0:AAGAGGCA+TTATGCGA
 AAACGCGAAAAACCTTACCTACTCTTGACATCTACAGGATCCTGCGGAGACGCGGGAGTGCCTTCGGGAACTGTAA
