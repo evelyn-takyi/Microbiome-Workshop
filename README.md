@@ -12,7 +12,7 @@ This workshop provides an overview of the bioinformatics workflow in taxonomic p
 ### To dos prior to attending workshop
 
 A. Please download R and RStudio and install it on your computer 
-- [Download R](https://cran.cnr.berkeley.edu) 
+- [Download R](https://cran.r-project.org) 
 - [Download RStudio](https://www.rstudio.com/products/rstudio/download/)
 
 B. Paper to read
