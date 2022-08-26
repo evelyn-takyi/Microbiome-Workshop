@@ -7,7 +7,7 @@
 Welcome to 16S microbiome data analysis
 
 ## Introduction
-This workshop provides an overview of the bioinformatics workflow in taxonomic profiling studies. The training material walks you through an example workflow that shows the steps of taxonomic data analysis covering data processing, analysis and visualization. At the end of the training,you will become familiar with methods in taxonomic profiling studies of microbiome data.
+This workshop provides an overview of the bioinformatics workflow in taxonomic profiling studies. The training material walks you through an example workflow that shows the steps of taxonomic data analysis covering data processing, analysis and visualization. At the end of the training, you will become familiar with methods in taxonomic profiling studies of microbiome data.
 
 ### To dos prior to attending workshop
 
