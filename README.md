@@ -8,8 +8,11 @@ Welcome to Analysis of 16S microbiome data
 ```
 ### To dos prior to attending workshop
 ```
-A.Please download R and RStudio and install it on your computer -Download R https://cran.cnr.berkeley.edu -Download RStudio https://www.rstudio.com/products/rstudio/download/. Download the free RStudio Desktop.
+A.Please download R and RStudio and install it on your computer 
+[Download R](https://cran.cnr.berkeley.edu) 
+-Download RStudio https://www.rstudio.com/products/rstudio/download/
 B. Before coming to the workshop, read these papers:
+
 C. Come with a fully charged laptop
 ```
 
