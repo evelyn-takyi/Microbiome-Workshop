@@ -15,9 +15,6 @@ A. Please download R and RStudio and install it on your computer
 - [Download R](https://cran.cnr.berkeley.edu) 
 - [Download RStudio](https://www.rstudio.com/products/rstudio/download/)
 
-B.Before coming to the workshop, read these papers
--
-
 C. Come with a fully charged laptop
 
 D. - No prior experience with microbiome data or R is required. Familiarity with R is a plus!.
