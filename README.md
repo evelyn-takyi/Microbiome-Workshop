@@ -15,6 +15,9 @@ A. Please download R and RStudio and install it on your computer
 - [Download R](https://cran.cnr.berkeley.edu) 
 - [Download RStudio](https://www.rstudio.com/products/rstudio/download/)
 
+B. Read the following papers
+-[Paper to read](https://zarrinparlab.org/wp-content/uploads/2020/03/Allaband-et-al-CGH-microbiome-101.pdf)
+
 C. Come with a fully charged laptop
 
 D. - No prior experience with microbiome data or R is required. Familiarity with R is a plus!.
