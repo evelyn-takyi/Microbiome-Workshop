@@ -8,9 +8,9 @@ Some examples include Mothur, Phyloseq, Dada2, UPARSE and QIIME 1 and QIIME 2.
 
 ###  Raw sequencing dataset (Can be in the form of paired end or single end sequences)
 
-A. Single end: Sequence base pairs are generated from only one direction of the fragment. 
+A. Single end: sequence base pairs generated from only one direction of the fragment. 
 
-B. Paired-end Sequence base pairs are generated from one direction of the fragment(forward read) and then starts another round of reading from the opposite end of the fragment(Reverse read).
+B. Paired-end: sequence base pairs generated from one direction of the fragment(forward read) and then another reading from the opposite end of the fragment(Reverse read).
 
 ## An example of a paired end sequencing
 
