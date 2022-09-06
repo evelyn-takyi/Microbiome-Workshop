@@ -1,3 +1,7 @@
+#  Background
+
+A general workflow for processing 16S rRNA gene amplicon data in R.
+
 ## Set your working directory in R
 ```
 setwd("~/Desktop/microbiome/")
@@ -153,6 +157,7 @@ readsumsdf <- data.frame(nreads = sort(taxa_sums(phy), decreasing = TRUE),
 sample_sum_df <- data.frame(sum = sample_sums(phy))
 ```
 #### Step2. Factor reordering and renaming
+##### The default sorting for ggplot2 in R is alphabetical. For example if  you want to label UV and Non-UV, It will by default place Non-UV on the left and UV on the right. However, you can switch the positions of the labels on the plot.
 
 ```{r}
 # Relabel Water Type
@@ -165,9 +170,9 @@ sample_data(phy)$Name <- factor(sample_data(phy)$Name, labels = c("T6UV","T6NUV"
 levels(sample_data(phy)$Name)
 
 # Reorder Trial labels
-levels(sample_data(phy)$ProjectName)
-sample_data(phy)$ProjectName <- factor(sample_data(phy)$ProjectName, levels = c("Trial6", "T7"))
-levels(sample_data(phy)$ProjectName)
+levels(sample_data(phy)$Trial)
+sample_data(phy)$Trial <- factor(sample_data(phy)$Trial, levels = c("Trial6", "Trial7"))
+levels(sample_data(phy)$Trial)
 ```
 
 #### Step3. Make plots for number of reads
@@ -182,6 +187,7 @@ p.reads = ggplot(readsumsdf, aes(x = sorted, y = nreads)) +
   ylab("# of Sequences")
 p.reads
 ```
+
 #### Step 4: Detect and remove outlier samples
 ##### Format a data table to combine sample summary data with sample variable data
 ```{r}
@@ -189,7 +195,7 @@ ss <- sample_sums(phy)
 sd <- as.data.frame(sample_data(phy))
 ss.df <- merge(sd, data.frame("Reads" = ss), by ="row.names")
 # Plot the data by the treatment variable
-y = 10000 # Set a threshold for the minimum number of acceptable reads. 
+y = 1000 # Set a threshold for the minimum number of acceptable reads. 
 x = "SampleName" # Set the x-axis variable you want to examine
 label = "Row.names" # This is the label you want to overlay on the points
 p.ss.boxplot <- ggplot(ss.df, aes_string(x, y = "Reads", color = "Treatment")) + 
@@ -202,11 +208,11 @@ p.ss.boxplot <- ggplot(ss.df, aes_string(x, y = "Reads", color = "Treatment")) +
 p.ss.boxplot
 
 ```
-###### Remove samples that are outliers
-```{r}
-#nsamples(phy)
-#ps1 <- phy2 %>% subset_samples(SampleName != "VIMS4_S4A_3" & SampleName != "UVL_S4A_3"& SampleName != "VIMS1_CONA_1")
-#nsamples(ps1)
+The above data assessment helps to
+1) Get the number of sequences per taxa (left plot). 
+2) The number of reads per sample. 
+3) Both of these plots will help give an understanding of how your data are structured across taxa.
+
 ```
 
 #### Step 5: Taxon cleaning
@@ -235,13 +241,13 @@ get_taxa_unique(ps2, "Phylum")
 ###### All samples
 ```{r}
 # Trial6
-ps2.T6 <- subset_samples(ps2, ProjectName == "Trial6")
+ps2.T6 <- subset_samples(ps2, Trial == "Trial6")
 any(taxa_sums(ps2.T6) == 0) # In this case it is TRUE, so remove the zero's
 ps2.T6 <- prune_taxa(taxa_sums(ps2.T6) > 0, ps2.T6)
 any(taxa_sums(ps2.T6) == 0) # It should now be false
 
 # Trial7
-ps2.T7 <- subset_samples(ps2, ProjectName == "T7")
+ps2.T7 <- subset_samples(ps2, Trial == "Trial7")
 any(taxa_sums(ps2.T7) == 0) # In this case it is TRUE, so remove the zero's
 ps2.T7 <- prune_taxa(taxa_sums(ps2.T7) > 0, ps2.T7)
 any(taxa_sums(ps2.T7) == 0) # It should now be false
@@ -269,6 +275,8 @@ p.prevdf1
 
 ```
 #### Data transformations methods and plots
+Many analysis in community ecology benefit from data transformation. Many microbiome data sets do not fit to a normal distribution, but transforming them towards normality may enable more appropriate data for specific statistical tests. The choice of transformation is not straight forward. 
+
 ###### Transform to Relative abundances
 
 ```{r}
@@ -298,11 +306,13 @@ ggarrange(p.no.log, p.log, ncol = 2, labels = c("A)", "B)"))
 Raf <-ggrare(ps2, step = 50, color="Name",  se = TRUE)
 ```
 ### Alpha diversity
-###### Alpha diversity is a standard tool researchers can use to calculate the number of bacterial taxa present in a study or study group and the relationships between relative abundance and how evenly taxa are distributed. 
+###### Alpha diversity is a standard tool researchers can use to calculate the number of bacterial taxa present in a study or study group and the relationships between relative abundance and how evenly taxa are distributed. These are classic representations of species number and diversity in a study which provide useful summary information about the numbers and relative abundances of bacterial taxa within the study.
+
+#Similar to the plot above, we can calculate several measures of alpha diversity, add them to a data frame and use ggplot2 to follow the alpha diversity trajectory over time.
 ```{r}
 SD <- sample_data(ps2) %>%
     data.frame() %>%
-    select("Treatment","ProjectName","Type", "Name") %>%
+    select("Treatment","Trial","Type", "Name") %>%
     mutate_if(is.factor,as.character)
 SD1 <- cbind(SampleID = rownames(SD ), SD)
 rownames(SD1 ) <- NULL
@@ -315,7 +325,7 @@ adiv <- data.frame(
   "Chao1"= phyloseq::estimate_richness(All_S4_prune_rarefy, measures = "Chao1"),
   "Status" = phyloseq::sample_data(All_S4_prune_rarefy)$Treatment)
 head(adiv)
-adiv$ProjectName <- SD$ProjectName
+adiv$Trial <- SD$Trial
 adiv$Treatment <- SD$Treatment
 adiv$Name <- SD$Name
 adiv
@@ -324,10 +334,8 @@ adiv
 ##### Simpson diversity
 ```{r}
 Div_SIM <- ggplot(adiv, aes(as.factor(Name), Simpson)) +
-  facet_grid(.~ProjectName, scales="free",space="free_x",switch="y")+
+  facet_grid(.~Trial, scales="free",space="free_x",switch="y")+
   geom_boxplot(aes(fill=factor(Treatment)),width=0.5)+
-  #geom_signif(comparisons = list(c("A", "B"), c("B","C")),
-              #map_signif_level=TRUE)+
   scale_fill_manual(values=c("blue", "orange","blue", "orange")) +
   labs(y="Simpson's Diversity", x="Trial", fill="Treatment")+theme_bw()+
   theme(strip.text.x = element_text(size=12,face="bold"))+
@@ -337,21 +345,20 @@ Div_SIM <- ggplot(adiv, aes(as.factor(Name), Simpson)) +
         panel.border = element_rect(colour="grey"))+
   scale_y_continuous(limits=c(0,1))
 Div_SIM
+
 ## Statistics
 Simp.aov <- aov(Simpson ~ Name:Treatment+Name+Treatment, data = adiv)
 summary(Simp.aov)
 TukeyHSD(Simp.aov)
-tukey_Trial2 <-HSD.test(Simp.aov, "ProjectName", group = TRUE)
+tukey_Trial2 <-HSD.test(Simp.aov, "Trial", group = TRUE)
 tukey_Trial2
 kruskal.test(Simpson ~ Name, data=adiv)
 ```
 ##### Richness
 ```{r}
 Div_rich <- ggplot(adiv, aes(as.factor(Name), Chao1.Chao1)) +
-  facet_grid(.~ProjectName, scales="free",space="free_x",switch="y")+
+  facet_grid(.~Trial, scales="free",space="free_x",switch="y")+
   geom_boxplot(aes(fill=factor(Treatment)),width=0.5)+
-  #geom_signif(comparisons = list(c("A", "B"), c("B","C")),
-              #map_signif_level=TRUE)+
   scale_fill_manual(values=c("blue", "orange","blue", "orange")) +
   labs(y="Chao1 Richness", x="Trial", fill="Treatment")+theme_bw()+
   theme(strip.text.x = element_text(size=12,face="bold"))+
@@ -372,6 +379,8 @@ kruskal.test(Chao1.Chao1 ~ Name, data=adiv)
 ```
 
 #### NMDS Plot
+#### Beta diversity enables you to view overall relationships between samples. These relationships are calculated using a distance metric calculation (of which there are many) and these multi-dimensional relationships are evaluated and viewed in the two dimensions which explain the majority of their variance. Additional dimensions can be explored to evaluate how samples are related to one another.
+
 ###### Log transformation moves to a more normal distribution
 ```{r}
 GPA1 <- ps2 %>% transform_sample_counts(function(x) log(1 + x))%>% psmelt()
@@ -439,13 +448,15 @@ theme(axis.text.x.top= element_text(face="bold",size="12", color="black"))+theme
 NMDSplot_Hatchery
 ```
 
-#### Abundance plot
-##### Phylum Abundance
+#### Community composition plotting
+Classic bar plots of bacterial composition present in each sample can be useful for communicating results. These are relatively easy to interpret when major shifts in microbial communities are present, howeverthey are not effective at detecting subtle shifts in communities or taxa and do not convey any statistical significance. It is appropriate to subject these plots to further statistical analysis. 
+
+##### Plot by Phylum 
 
 ```{r}
 SD <- sample_data(ps2) %>%
     data.frame() %>%
-    select("Treatment","ProjectName","Type", "Name") %>%
+    select("Treatment","Trial","Type", "Name") %>%
     mutate_if(is.factor,as.character)
 SD1 <- cbind(SampleID = rownames(SD ), SD)
 rownames(SD1 ) <- NULL
@@ -527,11 +538,11 @@ read_legend<-g_legend(ggplot(Meta_T,aes(SampleID,sum, fill=Treatment))+
 Order_plot1 <-grid.arrange(Read_plot, read_legend, Order_plot, ASV_legend, nrow=2, ncol=2, heights=c(1,2.5), widths=c(9,3.5))
 ```
 
-##### Order Abundance
+##### Plot by Order
 ```{r}
 SD <- sample_data(ps2) %>%
     data.frame() %>%
-    select("Treatment","ProjectName","Type", "Name") %>%
+    select("Treatment","Trial","Type", "Name") %>%
     mutate_if(is.factor,as.character)
 SD1 <- cbind(SampleID = rownames(SD ), SD)
 rownames(SD1 ) <- NULL
@@ -554,7 +565,7 @@ taxa_list<-colnames(Order1b)[1:N]
 Order1d <-data.frame(Order1b[,colnames(Order1b) %in% taxa_list], Others=rowSums(Order1b[,!colnames(Order1b) %in% taxa_list]))
 Order1d_long <-gather(Order1d, SampleID, Value)
 Order1d_long$Taxa <-factor(Order1d_long$SampleID, levels = unique(Order1d_long$SampleID))
-#Make a new data fram called meta_taxa and merge the metadata and long taxa data
+#Make a new dataframe called meta_taxa and merge the metadata and long taxa data
 Order1d_count<-as.data.frame(c(SD1, Order1d_long))
 ###Get the colours to use for plot
 my_colors <- c(
@@ -571,19 +582,19 @@ Order1d_count$Type <- as.character(Order1d_count$Type)
 Order_plot <- ggplot(Order1d_count)+
   geom_col(mapping = aes(x = SampleID, y = Value, fill = Taxa), position = "fill", show.legend = TRUE)+
   ylab("Percent Order Abundance") +
-  # facet_wrap(. ~ProjectName+Type, scales = "free_x") +
+  # facet_wrap(. ~Trial+Type, scales = "free_x") +
   theme(strip.background = element_rect(colour="black", size=1))+
   theme(strip.text.x = element_text(size=20,face="bold"))+
   facet_grid(.~Name+Treatment+Type, drop=TRUE,scale="free", space="free",switch="x")+
   scale_fill_manual(values = my_colors) +
-  xlab("ProjectName")+
+  xlab("Trial")+
   scale_y_continuous(expand = c(0,0),labels=scales::percent)+
   theme_minimal()+
    theme(axis.text.x = element_blank()) +
   theme(strip.background = element_rect(fill="gray85"),panel.spacing = unit(0.2,"lines"),axis.text.y.left = element_text(colour="black", size=14, face="bold"),
         axis.title.y = element_text(size = 14, face="bold"),
         title = element_text(size = 14, face="bold"))+ theme(legend.position="bottom")+ theme(legend.title = element_text(colour="black", size=10))+ theme(legend.text = element_text(colour="black", size=14, face="bold"))
-  labs(x="ProjectName", y="Percentage Phylum Abundance")
+  labs(x="Trial", y="Percentage Phylum Abundance")
 
 # plot the number of reads per sample
 Read_plot <-ggplot(Meta_T,aes(SampleID,sum, fill=Treatment))+
@@ -611,11 +622,36 @@ g_legend<-function(a.gplot){
 ASV_legend<-g_legend(ggplot(Order1d_count,aes(SampleID,Value,fill=Taxa))+  geom_col()+scale_fill_manual(values= my_colors)+labs(fill="Taxa"))
 read_legend<-g_legend(ggplot(Meta_T,aes(SampleID,sum, fill=Treatment))+
                      geom_col()+scale_fill_manual(values=c("gray67","gray5","#640025","#3ddda5","#cdffaa","#150e00","#bae278"))+labs(fill="Treatment"))
-
 # plot the figures and legends together
 Order_plot1 <-grid.arrange(Read_plot, read_legend, Order_plot, ASV_legend, nrow=2, ncol=2, heights=c(1,2.5), widths=c(9,3.5))
+```
 
+# Differential Abundance
+There are a number of ways to detect bacterial taxa (more accurately, ASVs) differentially abundant between one or more groups or along an environmental gradient (e.g. random forest, LEfSe, ANCOM, DESEQ2)
 
-
-
+```
+##Plot using LEFSe
+xt <- transform(ps2, 'hellinger')
+#Orderabundance <- xt %>% tax_glom(taxrank = "Order")
+deres <- diff_analysis(obj =xt, classgroup = "ProjectName",
+                       mlfun = "lda",alltax = FALSE,
+                       filtermod = "pvalue",
+                       firstcomfun = "kruskal_test",
+                       firstalpha = 0.01,
+                       strictmod = TRUE,
+                       secondcomfun = "wilcox_test",
+                       subclmin = 4,
+                       subclwilc = TRUE,
+                       secondalpha = 0.01,
+                       lda=2)
+es_pb <- ggeffectsize(obj=deres, 
+                     lineheight=0.3,
+                     linewidth=0.2,   pointsize = 4.5,) + 
+        scale_color_manual(values=c("blue","orange",
+                                    "orange","red", "chocolate4","gray0", "cyan", "green", "pink1","#599861"))+theme(axis.text.x = element_text(colour="black", size=20, face="bold")) +
+  theme(strip.background = element_rect(fill="gray85"),panel.spacing = unit(0.2,"lines"),axis.text.y.left = element_text(colour="black", size=20, face="bold"),axis.text.y.right = element_text(colour="black", size=20, face="bold"),
+        axis.title.y = element_text(size = 20, face="bold"),axis.title.x = element_text(size = 20, face="bold", colour = "black"),
+        title = element_text(size = 20, face="bold"))+labs(title = "Trial")+ylab("Taxa")+theme(legend.position="bottom")+ theme(legend.title = element_text(colour="black", size=10))+ theme(legend.text = element_text(colour="black", size=14, face="bold"))
+es_pb
+```
 
