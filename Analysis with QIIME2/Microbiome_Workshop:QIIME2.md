@@ -3,7 +3,7 @@
 
 ```
 There are a number of great software packages for general amplicon analysis. 
-Some examples include Mothur, Phyloseq, Dada2, UPARSE and QIIME 1 and QIIME 2. 
+Some examples include Mothur, Phyloseq, Dada2, UPARSE and QIIME 2. 
 ```
 
 ###  Raw sequencing dataset (Can be in the form of paired end or single end sequences)
