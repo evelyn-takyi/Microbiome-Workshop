@@ -330,11 +330,11 @@ qiime tools export --input-path taxonomy-as-metadata.qzv  --output-path taxonomy
 
 ### Other reference materials for microbiome data analysis
 ```
-[](https://usda-ars-gbru.github.io/Microbiome-workshop/tutorials/qiime2/)
-[](https://docs.qiime2.org)
-[](https://docs.qiime2.org/2019.7/tutorials/atacama-soils/)
-[](https://www.mothur.org/wiki/MiSeq_SOP)
-[](https://github.com/tracykteal/tutorials/blob/master/mothur/README.md)
-[](https://usda-ars-gbru.github.io/Microbiome-workshop/tutorials/amplicon/)
+[1](https://usda-ars-gbru.github.io/Microbiome-workshop/tutorials/qiime2/)
+[2](https://docs.qiime2.org)
+[3](https://docs.qiime2.org/2019.7/tutorials/atacama-soils/)
+[4](https://www.mothur.org/wiki/MiSeq_SOP)
+[5](https://github.com/tracykteal/tutorials/blob/master/mothur/README.md)
+[6](https://usda-ars-gbru.github.io/Microbiome-workshop/tutorials/amplicon/)
 ```
  
