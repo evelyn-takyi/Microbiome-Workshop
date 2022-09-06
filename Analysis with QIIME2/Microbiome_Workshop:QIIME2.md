@@ -173,6 +173,7 @@ Saved Visualization to: demuz.qzv
 ```
 
 #### Demultiplexed sequence counts summary
+
 Minimum:	304
 
 Median:		76691.0
@@ -188,17 +189,18 @@ Total:		18116102
 Total Samples: 24
 
 Sample name	Sequence count
-ET174_S16	272393
 
-ET161_S36	255862
+ET174_S16:	272393
 
-ET173_S8	252254
+ET161_S36:	255862
 
-ET165_S7	251485
+ET173_S8:	252254
 
-ET159_S22	244663
+ET165_S7:	251485
 
-ET167_S23	237313
+ET159_S22:	244663
+
+ET167_S23:	237313
 
 ET166_S15	233751
 
@@ -223,10 +225,12 @@ Sequence variant selection is the slowest step in the tutorial. For that reason 
 Selecting Sequence Variants
 The process of selecting sequence variants is the core processing step in amplicon analysis. 
 This takes the place of “OTU picking” a method of clustering similar data together that was the common method for dealing with sequencing errors until last year. 
-Three different methods have been published to select sequence variants, 
+Three different methods have been published to select sequence variants:
+
 1. Dada2 uses and statistical error correction model 
 2. Deblur takes an information theoretic approach
 3. UNOISE2 applies a heuristic. 
+ 
 Each of these methods attempt to remove or correct reads with sequencing errors and then remove chimeric sequences originating from different DNA templates. 
 
 ```
