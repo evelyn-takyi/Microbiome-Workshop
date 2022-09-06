@@ -172,9 +172,9 @@ When viewing the data look for the point in the forward and reverse reads where 
 Saved Visualization to: demuz.qzv
 ```
 
-##### Click on the link below to view and example of sequence quality output from QIIME2
+##### Click on the link below to view an example of sequence quality output from QIIME2
 ```
-https://view.qiime2.org/visualization/?type=html&src=2e3c11ec-b4d1-4bdd-a78d-fcb8be20fe54
+[QIIME2VIEW](https://view.qiime2.org/visualization/?type=html&src=2e3c11ec-b4d1-4bdd-a78d-fcb8be20fe54)
 ```
 #### Demultiplexed sequence counts summary
 Minimum:	304
@@ -189,7 +189,7 @@ Total:		18116102
 
 ##### Per-sample sequence counts
 
-Total Samples: 200
+Total Samples: 24
 
 Sample name	Sequence count
 ET174_S16	272393
@@ -205,7 +205,7 @@ ET166_S15	233751
 ### 7.  Denoising sample sequences(removal of noisy sequences)
 Denoising step performs:
 
-A. Removing non-biological parts of the sequences (i.e. primers, chimeric sequences,remove singletons)
+A.	Removing non-biological parts of the sequences (i.e. primers, chimeric sequences,remove singletons)
 B. Performing quality control
 C. Sequence variants calling and generating ASV/feature count tables
 D. Join denoised paired-end reads (in the case of DADA2), and then dereplicate those sequences. 😎
