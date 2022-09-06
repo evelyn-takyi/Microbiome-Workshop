@@ -314,7 +314,7 @@ Fastree creates an unrooted tree. We can root the tree at it’s midpoint with t
 
 ### 9. Assigning taxonomy
 #### Taxonomic analysis
-#### Sequence variants are of limited usefulness by themselves. Often we are interested in what kinds of organisms are present in our sample, not just the diversity of the sample. To identify these sequence variants two things are needed: a reference database and an algorithm for identifying the sequence using the database.
+Sequence variants are of limited usefulness by themselves. Often we are interested in what kinds of organisms are present in our sample, not just the diversity of the sample. To identify these sequence variants two things are needed: a reference database and an algorithm for identifying the sequence using the database.
 
 A. Greengages
 
