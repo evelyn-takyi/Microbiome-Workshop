@@ -119,7 +119,7 @@ module load QIIME2
 ```
 
 
-### 4. Importing sequencing files in folder data /00_RAW_gz into QIIME2 
+### 4. Importing sequencing files into QIIME2 
 
 
 ### Files to generate before importing data into QIIME2
@@ -128,7 +128,7 @@ To import files, we need to create a manifest file
  a. Manifest file(if using fastq file): Always make sure comma in each is aligned, correctly assign sample ID's.
 b. Metadata
 ```
-#### Copy the manifest file from desktop  into the 00_RAW_gz folder on bluewaves.
+#### Copy the manifest file from desktop into the 00_RAW_gz folder on bluewaves.
 ```
 MOOK Trial1 evelyntakyi$ scp 16S_sample_manifest.csv evelyn-takyi@bluewaves:/data/marine_diseases_lab/evelyn-takyi/microbiome workshop/00_RAW_gz
 ```
@@ -142,7 +142,7 @@ MOOK Trial1 evelyntakyi$ scp 16S_sample_manifest.csv evelyn-takyi@bluewaves:/dat
 ```
 q2-demux or cutadapt
 ```
-#### For this project the reads were sequences using Illumina paired-end, 250 base pair reads with forward and reverse reads in separate files.
+#### For this project the reads were sequenced using Illumina paired-end, 250 base pair reads with forward and reverse reads in separate files.
 ```
 Example of demultiplexed sequence reads
 
@@ -169,13 +169,13 @@ This will create a visualization file. You can download the file to your local c
 Now you can view the file on your local computer using the QIIME2 visualization server. 
 When viewing the data look for the point in the forward and reverse reads where quality scores decline below 25-30. We will need to trim reads to this point to create high quality sequence variants.
 ```
-#### To view the demultiplexed file to check quality scores
+
 ```
 [evelyn-takyi@n045 NEW]$ qiime demux summarize  --i-data demuz.qza  --o-visualization demuz.qzv
 Saved Visualization to: demuz.qzv
 ```
 
-#### Demultiplexed sequence counts summary
+#### Demultiplexed sequence counts summary outputs
 
 Minimum:	304
 
@@ -226,8 +226,11 @@ D.   Join denoised paired-end reads (in the case of DADA2), and then dereplicate
 Sequence variant selection is the slowest step in the tutorial. For that reason it is best to submit this step using the SLURM Sbatch scheduler.
 
 Selecting Sequence Variants
+
 The process of selecting sequence variants is the core processing step in amplicon analysis. 
-This takes the place of “OTU picking” a method of clustering similar data together that was the common method for dealing with sequencing errors until last year. 
+
+This takes the place of “OTU picking” a method of clustering similar data together that was the common method for dealing with sequencing errors.
+
 Three different methods have been published to select sequence variants:
 
 1. Dada2 uses and statistical error correction model 
@@ -242,7 +245,7 @@ Each of these methods attempt to remove or correct reads with sequencing errors 
 ```
 [evelyn-takyi@n045 NEW]$ qiime dada2 denoise-paired  --i-demultiplexed-seqs demuz.qza  --p-trim-left-f 19  --p-trim-left-r 19  --p-trunc-len-f 76 --p-trunc-len-r 76 --o-table table.qza --o-representative-sequences rep-seqs.qza --o-denoising-stats denoising-stats.qza
 ```
-#### After this process, we get an two files. Representative sequences and the denoising statics, feature table
+#### After this process, we get two files. Representative sequences,denoising statistics and feature table
 #### To visualize the output files
 ```
 [evelyn-takyi@n045 NEW]$ qiime feature-table tabulate-seqs  --i-data rep-seqs.qza --o-visualization rep-seqs.qzv
