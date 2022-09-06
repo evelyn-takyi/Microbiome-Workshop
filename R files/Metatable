@@ -1,28 +1,28 @@
-SampleID	SampleName    Technical Replicate   Biological Replicate   Trial  Treatment SampleType	Water Type Hatchery Year	Month	Location
-ET154_S43	UV_CON_B1_A	1			1		   Trial6	Control	larvae	UV	Mook Sea Farms	2021	January	Maine
-ET155_S51	UV_CON_B1_B	2			1		   Trial6	Control	larvae	UV	Mook Sea Farms	2021	January	Maine
-ET156_S59	UV_CON_B1_C	3			1		   Trial6	Control	larvae	UV	Mook Sea Farms	2021	January	Maine
-ET157_S6	UV_S4_B3_A	1	       		1		   Trial6	S4	larvae	UV	Mook Sea Farms	2021	January	Maine
-ET158_S14	UV_S4_B3_B	2			1		   Trial6	S4	larvae	UV	Mook Sea Farms	2021	January	Maine
-ET159_S22	UV_S4_B3_C	3			1		   Trial6	S4	larvae	UV	Mook Sea Farms	2021	January	Maine
-ET160_S29	NUV_CON_B2_A	1			1		   Trial6	Control	larvae	NUV	Mook Sea Farms	2021	January	Maine
-ET161_S36	NUV_CON_B2_B	2			1		   Trial6	Control	larvae	NUV	Mook Sea Farms	2021	January	Maine
-ET162_S44	NUV_CON_B2_C	3			1		   Trial6	Control	larvae	NUV	Mook Sea Farms	2021	January	Maine
-ET163_S52	NUV_S4_B4_A	1			1		   Trial6	S4	larvae	NUV	Mook Sea Farms	2021	January	Maine
-ET164_S60	NUV_S4_B4_B	2			1		   Trial6	S4	larvae	NUV	Mook Sea Farms	2021	January	Maine
-ET165_S7	NUV_S4_B4_C	3			1		   Trial6	S4	larvae	NUV	Mook Sea Farms	2021	January	Maine
-ET166_S15	UV_CON_B2_A	1			1		   Trial6	Control	larvae	UV	Mook Sea Farms	2021   February	Maine
-ET167_S23	UV_CON_B2_B	2			1		   Trial6	Control	larvae	UV	Mook Sea Farms	2021   February	Maine
-ET168_S30	UV_CON_B2_C	3			1		   Trial6	Control	larvae	UV	Mook Sea Farms	2021   February	Maine
-ET169_S37	UV_S4_B4_A	1			1		   Trial6	S4	larvae	UV	Mook Sea Farms	2021   February	Maine
-ET170_S45	UV_S4_B4_B	2			1		   Trial6	S4	larvae	UV	Mook Sea Farms	2021   February	Maine
-ET171_S53	UV_S4_B4_C	3			1		   Trial6	S4	larvae	UV	Mook Sea Farms	2021   February	Maine
-ET172_S61	UV_S4_B5_A	1			2		   Trial6	S4	larvae	UV	Mook Sea Farms	2021   February	Maine
-ET173_S8	UV_S4_B5_B	2			2		   Trial6	S4	larvae	UV	Mook Sea Farms	2021   February	Maine
-ET174_S16	UV_S4_B5_C	3			2		   Trial6	S4	larvae	UV	Mook Sea Farms	2021   February	Maine
-ET285_S59	UVCON_B9_A1	1			1		   Trial7	Control	larvae	UV	Mook Sea Farms	2021	June	Maine
-ET286_S71	UVCON_B9_A2	2			1		   Trial7	Control	larvae	UV	Mook Sea Farms	2021	June	Maine
-ET287_S83	UVCON_B9_A3	3			1		   Trial7	Control	larvae	UV	Mook Sea Farms	2021	June	Maine
+SampleID	SampleName    Technical Replicate   Biological Replicate   Trial       Treatment   SampleType	Type     Name	 Hatchery      Year	Month	Location
+ET154_S43	UV_CON_B1_A	1			1		   Trial6	Control	   larvae	UV	T6UV	Mook Sea Farms	2021	January	Maine
+ET155_S51	UV_CON_B1_B	2			1		   Trial6	Control	   larvae	UV	T6UV	Mook Sea Farms	2021	January	Maine
+ET156_S59	UV_CON_B1_C	3			1		   Trial6	Control	   larvae	UV	T6UV	Mook Sea Farms	2021	January	Maine
+ET157_S6	UV_S4_B3_A	1	       		1		   Trial6	S4	   larvae	UV	T6UV	Mook Sea Farms	2021	January	Maine
+ET158_S14	UV_S4_B3_B	2			1		   Trial6	S4	   larvae	UV	T6UV	Mook Sea Farms	2021	January	Maine
+ET159_S22	UV_S4_B3_C	3			1		   Trial6	S4	   larvae	UV	T6UV	Mook Sea Farms	2021	January	Maine
+ET160_S29	NUV_CON_B2_A	1			1		   Trial6	Control	   larvae	NUV	T6NUV	Mook Sea Farms	2021	January	Maine
+ET161_S36	NUV_CON_B2_B	2			1		   Trial6	Control    larvae	NUV	T6NUV	Mook Sea Farms	2021	January	Maine
+ET162_S44	NUV_CON_B2_C	3			1		   Trial6	Control	   larvae	NUV	T6NUV	Mook Sea Farms	2021	January	Maine
+ET163_S52	NUV_S4_B4_A	1			1		   Trial6	S4	   larvae	NUV	T6NUV	Mook Sea Farms	2021	January	Maine
+ET164_S60	NUV_S4_B4_B	2			1		   Trial6	S4	   larvae	NUV	T6NUV	Mook Sea Farms	2021	January	Maine
+ET165_S7	NUV_S4_B4_C	3			1		   Trial6	S4	   larvae	NUV	T6NUV	Mook Sea Farms	2021	January	Maine
+ET166_S15	UV_CON_B2_A	1			1		   Trial6	Control	   larvae	UV	T6UV1	Mook Sea Farms	2021   February	Maine
+ET167_S23	UV_CON_B2_B	2			1		   Trial6	Control	   larvae	UV	T6UV1	Mook Sea Farms	2021   February	Maine
+ET168_S30	UV_CON_B2_C	3			1		   Trial6	Control	   larvae	UV	T6UV1	Mook Sea Farms	2021   February	Maine
+ET169_S37	UV_S4_B4_A	1			1		   Trial6	S4	   larvae	UV	T6UV1	Mook Sea Farms	2021   February	Maine
+ET170_S45	UV_S4_B4_B	2			1		   Trial6	S4	   larvae	UV	T6UV1	Mook Sea Farms	2021   February	Maine
+ET171_S53	UV_S4_B4_C	3			1		   Trial6	S4	   larvae	UV	T6UV1	Mook Sea Farms	2021   February	Maine
+ET172_S61	UV_S4_B5_A	1			2		   Trial6	S4	   larvae	UV	T6UV1	Mook Sea Farms	2021   February	Maine
+ET173_S8	UV_S4_B5_B	2			2		   Trial6	S4	   larvae	UV	T6UV1	Mook Sea Farms	2021   February	Maine
+ET174_S16	UV_S4_B5_C	3			2		   Trial6	S4	   larvae	UV	T6UV1	Mook Sea Farms	2021   February	Maine
+ET285_S59	UVCON_B9_A1	1			1		   Trial7	Control	   larvae	UV	T7UV	Mook Sea Farms	2021	June	Maine
+ET286_S71	UVCON_B9_A2	2			1		   Trial7	Control	   larvae	UV	T7UV	Mook Sea Farms	2021	June	Maine
+ET287_S83	UVCON_B9_A3	3			1		   Trial7	Control	   larvae	UV	T7UV	Mook Sea Farms	2021	June	Maine
 											
 											
 											
