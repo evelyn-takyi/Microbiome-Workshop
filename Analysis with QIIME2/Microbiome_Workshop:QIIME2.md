@@ -282,15 +282,17 @@ Fastree creates an unrooted tree. We can root the tree at it’s midpoint with t
 #### Sequence variants are of limited usefulness by themselves. Often we are interested in what kinds of organisms are present in our sample, not just the diversity of the sample. To identify these sequence variants two things are needed: a reference database and an algorithm for identifying the sequence using the database.
 
 A. Greengages
+
 B. Silva
+
 C. RDP database
+
 D. UNITE
 
 There are several methods of taxonomic classification available. The most commonly used classifier is the RDP classifier. Other software includes SINTAX and 16S classifier. 
-We will be using the QIIME2’s built-in naive Bayesian classifier (which is built on Scikit-learn but similar to RDP), noting that the method, while fast and powerful, has a tendency over-classify reads.
 
 There are two steps to taxonomic classification: training the classifier (or using a pre-trained dataset) and classifying the sequence variants. Generally it is best to train the classifier on the exact region of the 16S, 18S or ITS you sequenced.
-For this tutorial we will be using a classifier model trained on the Silva 99% database trimmed to the V4 region.
+For this tutorial we will be using a classifier model trained on the Silva 99% database trimmed to the V6 region.
 
 ```
 qiime feature-classifier extract-reads --i-sequences initialreads.qza --p-f-primer MNAMSCGMNRAACCTYANC --p-r-primer CGACRRCCATGCANCACCT --p-trunc-len 76 --p-min-length 65 --p-max-length 85 --o-reads ref-seqs.qza
@@ -328,11 +330,11 @@ qiime tools export --input-path taxonomy-as-metadata.qzv  --output-path taxonomy
 
 ### Other reference materials for microbiome data analysis
 ```
-https://usda-ars-gbru.github.io/Microbiome-workshop/tutorials/qiime2/
-[https://docs.qiime2.org]
-Especially: https://docs.qiime2.org/2019.7/tutorials/atacama-soils/
-https://www.mothur.org/wiki/MiSeq_SOP
-https://github.com/tracykteal/tutorials/blob/master/mothur/README.md
-https://usda-ars-gbru.github.io/Microbiome-workshop/tutorials/amplicon/
+[](https://usda-ars-gbru.github.io/Microbiome-workshop/tutorials/qiime2/)
+[](https://docs.qiime2.org)
+[](https://docs.qiime2.org/2019.7/tutorials/atacama-soils/)
+[](https://www.mothur.org/wiki/MiSeq_SOP)
+[](https://github.com/tracykteal/tutorials/blob/master/mothur/README.md)
+[](https://usda-ars-gbru.github.io/Microbiome-workshop/tutorials/amplicon/)
 ```
  
