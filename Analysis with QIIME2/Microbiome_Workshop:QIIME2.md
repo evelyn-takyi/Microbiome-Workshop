@@ -233,9 +233,9 @@ This takes the place of “OTU picking” a method of clustering similar data to
 
 Three different methods have been published to select sequence variants:
 
-1. Dada2 uses and statistical error correction model 
-2. Deblur takes an information theoretic approach
-3. UNOISE2 applies a heuristic. 
+1. Dada2 
+2. Deblur 
+3. UNOISE2 
  
 Each of these methods attempt to remove or correct reads with sequencing errors and then remove chimeric sequences originating from different DNA templates. 
 
