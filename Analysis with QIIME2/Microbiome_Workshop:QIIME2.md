@@ -39,8 +39,11 @@ It is really just a zip file containing a specially formatted directory with dat
 ```
 ## Data Visualization
 ```
-You can then create visualisations from the output files
-All of QIIME2 files can be viewed using an online browser that is available at https://view.qiime2.org. .qza files will contain basic info (name, universally unique identifier, data type and data format) as well ad a graph of data provenance.
+You can create visualisations from the output files in QIIME2
+All of QIIME2 files can be viewed using an online browser that is available at [QIIME2VIEW](https://view.qiime2.org)
+
+.qza files contain basic info (name, universally unique identifier, data type and data format) as well as a graph of data provenance.
+
 .qzv files will contain all of that and graphic visualizations. 
 ```
 
@@ -49,7 +52,7 @@ All of QIIME2 files can be viewed using an online browser that is available at h
 #### 1.  Files to generate to use in QIIME2
 	A. Manifest file : must be saved in csv file.(This is a  simple tab-delimited file with the sample ID and path of each sequence file:
 ```
-sample-id	        absolute-filepath	                    direction
+sample-id	        absolute-filepath	                direction
 ET101_S1	$PWD/00_RAW_gz/ET101_S1_L001_R1_001.fastq.gz	forward
 ET101_S1	$PWD/00_RAW_gz/ET101_S1_L001_R2_001.fastq.gz	reverse
 ET102_S2	$PWD/00_RAW_gz/ET102_S2_L001_R1_001.fastq.gz	forward
