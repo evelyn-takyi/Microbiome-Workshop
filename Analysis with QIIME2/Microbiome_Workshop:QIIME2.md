@@ -33,7 +33,12 @@ AAACGCGAAAAACCTTACCTACTCTTGACATCTACAGGATCCTGCGGAGACGCGGGAGTGCCTTCGGGAACTGTAA
 ## Understanding QIIME2 files
 
 ```
-QIIME2 uses two different file types that contain the data and metadata from an analysis: .qza files are data files while .qzv files are visualizations. 
+QIIME2 uses two different file types that contain the data and metadata from an analysis:
+
+.qza files are data files
+
+.qzv files are visualizations 
+
 The authors of QIIME2 call these data files “data artifacts” to indicate that they are objects containing data and metadata about an experiment. 
 It is really just a zip file containing a specially formatted directory with data and metadata. You can see what type of data is contained in a data file with the command qiime tools peek filename.qza.
 ```
@@ -125,7 +130,7 @@ module load QIIME2
 ### Files to generate before importing data into QIIME2
 ```
 To import files, we need to create a manifest file  
- a. Manifest file(if using fastq file): Always make sure comma in each is aligned, correctly assign sample ID's.
+ a. Manifest file(if using fastq file)
 b. Metadata
 ```
 #### Copy the manifest file from desktop into the 00_RAW_gz folder on bluewaves.
@@ -218,7 +223,7 @@ B.   Performing quality control
 
 C.   Sequence variants calling and generating ASV/feature count tables
 
-D.   Join denoised paired-end reads (in the case of DADA2), and then dereplicate those sequences. 
+D.   Join denoised paired-end reads (in the case of DADA2), and then dereplicate those sequences.  
 
 
 ##### NOTES
@@ -249,8 +254,29 @@ Each of these methods attempt to remove or correct reads with sequencing errors 
 #### To visualize the output files
 ```
 [evelyn-takyi@n045 NEW]$ qiime feature-table tabulate-seqs  --i-data rep-seqs.qza --o-visualization rep-seqs.qzv
+```
+Feature ID/ASV				Sequence 	Length	Sequence
+a6c078281c3cd95487896928fd9133d9	60	TACACTTGACATACAGAGAACTTACCAGAGATGGTTTGGTGCCTTCGGGAACTCTGATAC
 
+15ef4dadc1fd178e21233bc171c1ce65	60	AACCCTTGACATCCTCGGACCACCAGAGAGATCTGGTTTTCACTTCGGTGACCGAGTGAC
+
+0b38880649dd0828af6b8656a526ee82	60	TACACTTGACATGCTGAGAAGTTACTAGAGATAGTTTCGTGCCTTCGGGAACTCAGACAC
+
+fd07b779ce53ac4d2d9225cc2cfbee68	60	TACTCTTGACATCCAGAGAAGCCAGCGGAGACGCAGGTGTGCCTTCGGGAACTCTGAGAC
+```
+	
 [evelyn-takyi@n045 NEW]$ qiime metadata tabulate --m-input-file denoising-stats.qza  --o-visualization denoising-stats.qzv
+```
+sample-id 	input	filtered    denoised	merged	non-chimeric	
+
+ET130_S40	174809	128636	    128166	124167	124055
+
+ET131_S48	225625	148034	    147565	143329	143209
+
+ET132_S56	219825	162602	    162195	157813	157787
+
+ET133_S3	80288	56648	    56519	55513	55327
+```
 
 [evelyn-takyi@n045 NEW]$ qiime feature-table summarize --i-table table.qza --o-visualization table.qzv --m-sample-metadata-file VIMS_16S_Metadata.txt
 
@@ -282,7 +308,6 @@ Fastree creates an unrooted tree. We can root the tree at it’s midpoint with t
 [evelyn-takyi@n045 NEW]$ time qiime phylogeny midpoint-root --i-tree unrooted-tree.qza --o-rooted-tree rooted-tree.qza
 ```
 
-
 ### 9. Assigning taxonomy
 #### Taxonomic analysis
 #### Sequence variants are of limited usefulness by themselves. Often we are interested in what kinds of organisms are present in our sample, not just the diversity of the sample. To identify these sequence variants two things are needed: a reference database and an algorithm for identifying the sequence using the database.
@@ -311,6 +336,15 @@ qiime feature-classifier classify-sklearn  --i-classifier classifier.qza  --i-re
 ```
 ```
 [evelyn-takyi@n044 vims]$ qiime metadata tabulate --m-input-file taxonomy-with-spaces/taxonomy.tsv  --o-visualization taxonomy-as-metadata.qzv
+```
+```
+Feature ID/ASV					Taxonomy										Confidence
+
+00128a1ce1786f8c5933dcdfe3093f81	Bacteria;Bacteroidetes;Bacteroidia;Flavobacteriales;Flavobacteriaceae				0.99716786
+
+0014414ef4324b3de1a2a872fd0272c0	Bacteria;Proteobacteria;Gammaproteobacteria;Alteromonadales;Alteromonadaceae;Rheinheimera	0.8725550036
+
+0017886caf4b856383dfe2d7f07375ec	Bacteria											0.985387407
 ```
 ```
 qiime tools export --input-path taxonomy-as-metadata.qzv  --output-path taxonomy-as-metadata
