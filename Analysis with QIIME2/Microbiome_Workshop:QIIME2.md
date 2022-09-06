@@ -189,11 +189,17 @@ Total Samples: 24
 
 Sample name	Sequence count
 ET174_S16	272393
+
 ET161_S36	255862
+
 ET173_S8	252254
+
 ET165_S7	251485
+
 ET159_S22	244663
+
 ET167_S23	237313
+
 ET166_S15	233751
 
 
@@ -202,8 +208,11 @@ ET166_S15	233751
 Denoising step performs:
 
 A.   Removing non-biological parts of the sequences (i.e. primers, chimeric sequences,remove singletons)
+
 B.   Performing quality control
+
 C.   Sequence variants calling and generating ASV/feature count tables
+
 D.   Join denoised paired-end reads (in the case of DADA2), and then dereplicate those sequences. 
 
 
