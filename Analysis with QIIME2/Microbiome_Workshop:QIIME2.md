@@ -181,7 +181,7 @@ Saved Visualization to: demuz.qzv
 ```
 
 #### Demultiplexed sequence counts summary outputs
-
+```
 Minimum:	304
 
 Median:		76691.0
@@ -191,9 +191,9 @@ Mean:		90580.51
 Maximum:	272393
 
 Total:		18116102
-
+```
 ##### Per-sample sequence counts
-
+```
 Total Samples: 24
 
 Sample name	Sequence count
@@ -211,7 +211,7 @@ ET159_S22:	244663
 ET167_S23:	237313
 
 ET166_S15	233751
-
+```
 
 
 ### 7.  Denoising sample sequences(removal of noisy sequences)
@@ -255,7 +255,9 @@ Each of these methods attempt to remove or correct reads with sequencing errors 
 ```
 [evelyn-takyi@n045 NEW]$ qiime feature-table tabulate-seqs  --i-data rep-seqs.qza --o-visualization rep-seqs.qzv
 ```
+```
 Feature ID/ASV				Sequence 	Length	Sequence
+
 a6c078281c3cd95487896928fd9133d9	60	TACACTTGACATACAGAGAACTTACCAGAGATGGTTTGGTGCCTTCGGGAACTCTGATAC
 
 15ef4dadc1fd178e21233bc171c1ce65	60	AACCCTTGACATCCTCGGACCACCAGAGAGATCTGGTTTTCACTTCGGTGACCGAGTGAC
@@ -264,8 +266,9 @@ a6c078281c3cd95487896928fd9133d9	60	TACACTTGACATACAGAGAACTTACCAGAGATGGTTTGGTGCCT
 
 fd07b779ce53ac4d2d9225cc2cfbee68	60	TACTCTTGACATCCAGAGAAGCCAGCGGAGACGCAGGTGTGCCTTCGGGAACTCTGAGAC
 ```
-	
+```	
 [evelyn-takyi@n045 NEW]$ qiime metadata tabulate --m-input-file denoising-stats.qza  --o-visualization denoising-stats.qzv
+```
 ```
 sample-id 	input	filtered    denoised	merged	non-chimeric	
 
@@ -276,6 +279,7 @@ ET131_S48	225625	148034	    147565	143329	143209
 ET132_S56	219825	162602	    162195	157813	157787
 
 ET133_S3	80288	56648	    56519	55513	55327
+```
 ```
 
 [evelyn-takyi@n045 NEW]$ qiime feature-table summarize --i-table table.qza --o-visualization table.qzv --m-sample-metadata-file VIMS_16S_Metadata.txt
