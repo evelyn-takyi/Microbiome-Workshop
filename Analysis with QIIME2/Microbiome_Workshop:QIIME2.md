@@ -177,11 +177,15 @@ Saved Visualization to: demuz.qzv
 https://view.qiime2.org/visualization/?type=html&src=2e3c11ec-b4d1-4bdd-a78d-fcb8be20fe54
 ```
 #### Demultiplexed sequence counts summary
-Minimum:	|	304
-Median:		|	76691.0
-Mean:		|	90580.51
-Maximum:	|	272393
-Total:		|	18116102
+Minimum:	304
+
+Median:		76691.0
+
+Mean:		90580.51
+
+Maximum:	272393
+
+Total:		18116102
 
 ##### Per-sample sequence counts
 
@@ -201,9 +205,9 @@ ET166_S15	233751
 ### 7.  Denoising sample sequences(removal of noisy sequences)
 Denoising step performs:
 
-B. Removing non-biological parts of the sequences (i.e. primers, chimeric sequences,remove singletons)
-C. Performing quality control
-A. Sequence variants calling and generating ASV/feature count tables
+A. Removing non-biological parts of the sequences (i.e. primers, chimeric sequences,remove singletons)
+B. Performing quality control
+C. Sequence variants calling and generating ASV/feature count tables
 D. Join denoised paired-end reads (in the case of DADA2), and then dereplicate those sequences. 😎
 
 
