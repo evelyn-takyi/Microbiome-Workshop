@@ -629,8 +629,8 @@ Order_plot1 <-grid.arrange(Read_plot, read_legend, Order_plot, ASV_legend, nrow=
 # Differential Abundance
 There are a number of ways to detect bacterial taxa (more accurately, ASVs) differentially abundant between one or more groups or along an environmental gradient (e.g. random forest, LEfSe, ANCOM, DESEQ2)
 
+#### Plot using LEFSe
 ```
-##Plot using LEFSe
 xt <- transform(ps2, 'hellinger')
 #Orderabundance <- xt %>% tax_glom(taxrank = "Order")
 deres <- diff_analysis(obj =xt, classgroup = "ProjectName",
