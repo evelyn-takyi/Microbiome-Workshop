@@ -30,14 +30,12 @@ library(grid)
 library(ggpubr)
 library(agricolae)
 library(microbiome)
-#library(MicrobeR)
+library(MicrobeR)
 library(pheatmap)
 library("apeglm")
 library(ranacapa)
 library(devtools)
 library(phylosmith)
-library(VennDiagram)
-library(UpSetR)
 library(coin)
 library(MicrobiotaProcess)
 ```
@@ -50,14 +48,13 @@ library(MicrobiotaProcess)
  ## Reading data into R
 ### The format of microbiome data
 ```
-Most pipelines for processing high-throughput amplicon data, such as mothur, QIIME, and dada2, result in a matrix of read counts.
-One dimension of this matrix (i.e. the rows or the columns) consists of OTUs or ASVs.The other dimension consists of samples.
-Different tools will expect/output different orientations of the matrix, but, in our case, columns are samples and rows are OTUs.
-Sometimes the OTU data and the abundance matrix are two separate tables. There is usually another table with sample information in rows.
-This makes it easy to add lots of additional sample data columns that can be used to subset the data. Each sample and OTU will have an unique ID.
+Most pipelines for processing high-throughput amplicon data, such as mothur, QIIME, and dada2, result in a matrix of read counts or OTU/ASV count tables.One dimension of this matrix (i.e. the rows or the columns) consists of OTUs or ASVs.The other dimension consists of samples.
+Different tools will expect/output different orientations of the matrix, but, in our case, columns are samples and rows are OTUs/ASVs.
+Sometimes the OTU/ASV data and the abundance matrix are two separate tables. There is usually another table with sample information in rows.
+This makes it easy to add lots of additional sample data columns that can be used to subset the data. Each sample and OTU/ASV will have an unique ID.
 ```
 
-### Load all the ASV counttables and metatable, taxonomy table and combine all into one big table in R
+### Load all the ASV counttables and metatable, taxonomy table you downloaded and combine all into one big table in R
 
 ###### Load ASV Count table
 ```{r}
@@ -75,7 +72,8 @@ meta_table1 <- cbind(SampleID = rownames(meta_table ), meta_table)
 rownames(meta_table1 ) <- NULL
 meta_table1$Treatment <- as.character(meta_table1$Treatment)
 meta_table1$Treatment <- factor(meta_table1$Treatment, levels=unique(meta_table1$Treatment))
-meta_table1$ProjectName <- as.character(meta_table1$ProjectName)
+meta_table1$Trial <- as.character(meta_table1$Trial)
+meta_table1$Trial <- factor(meta_table1$Trial, levels=unique(meta_table1$Trial))
 
 ```
 ###### Load Taxonomy table
@@ -89,7 +87,7 @@ taxa_A1  <- cbind(FeatureID = rownames(taxa_A ), taxa_A)
 rownames(taxa_A1) <- NULL
 ```
 
-## Joinn all data
+## Joinn all data(count talbe, taxnonomy and meta table)
 ```
 M1count<-full_join(taxa_A1, abun_count)
 combine_b <-full_join(M1count,meta_table1)
@@ -101,26 +99,27 @@ newdata1 <-spread(newdata, SampleID, Value) ##spread the data into a wide format
 x<-dim(newdata1)[2] # number of columns
 newdata1[2:x] <- lapply(newdata1[2:x], function(x) as.numeric(as.character(x)))
 seq_total<-apply(newdata1[2:x],2,sum) #number of sequences per sample
-ASV_count<-colSums(newdata1[2:x]>0) # OTUs per sample
-ASV_single<-colSums(newdata1[2:x]==1) # OTUs with only 1 seq
-ASV_double<-colSums(newdata1[2:x]==2) # OTUs that have only 2 seqs
-ASV_true<-colSums(newdata1[2:x]>2) # Number of OTUs with >2 seqs
-dataset_info<-data.frame(seq_total,ASV_count)
+ASV_count<-colSums(newdata1[2:x]>0) # ASVs per sample
+ASV_single<-colSums(newdata1[2:x]==1) # ASVs with only 1 sequence
+ASV_double<-colSums(newdata1[2:x]==2) # ASVs that have only 2 sequences
+ASV_true<-colSums(newdata1[2:x]>2) # Number of ASVs with >2 sequences
+dataset_info<-data.frame(seq_total,ASV_count)# combine the sequence total and ASV counts
 
 #add the rownames as a proper column
 dataset_info <- cbind(SampleID = rownames(dataset_info), dataset_info)
 dataset_info
 rownames(dataset_info) <- NULL
-#combine the metadata with dataset_info
+#combine the meta table with dataset_info
 data_meta <- meta_table1 [c(1,2,4)]
 basic_stat <- full_join(data_meta, dataset_info)
 basic_stat
-#write.csv(basic_stat,"basic_stat.csv")
+
+#write.csv(basic_stat,"basic_stat.csv") #Write your results to files
 ```
 
 #### Convert data to a phyloseq object
 ```{r}
-Abund_table<- as.data.frame(t(abund_table))
+Abund_table<- as.data.frame(t(abund_table)) ##Transpose abund_table to have ASVs as rows and Sample IDs as columns
 A2 <-as.matrix(Abund_table)
 
 # First we need to create a phyloseq object using our count table
@@ -131,7 +130,7 @@ taxa_A2 <-taxa_A1 %>% remove_rownames %>% column_to_rownames(var="FeatureID")
 taxa_A2 <-as.matrix(taxa_A2)
 tax_tab_phy <- tax_table(taxa_A2)
 
-# Read in the metatable
+# Read in the meta table
 meta_table2 <-meta_table1 %>% remove_rownames %>% column_to_rownames(var="SampleID")
 sample_info_tab_phy <- sample_data(meta_table2)
 
@@ -157,7 +156,7 @@ readsumsdf <- data.frame(nreads = sort(taxa_sums(phy), decreasing = TRUE),
 sample_sum_df <- data.frame(sum = sample_sums(phy))
 ```
 #### Step2. Factor reordering and renaming
-##### The default sorting for ggplot2 in R is alphabetical. For example if  you want to label UV and Non-UV, It will by default place Non-UV on the left and UV on the right. However, you can switch the positions of the labels on the plot.
+##### The default sorting for ggplot2 in R is alphabetical. For example if you want to label UV and Non-UV, It will by default place Non-UV on the left and UV on the right. However, you can switch the positions of the labels on the plot.
 
 ```{r}
 # Relabel Water Type
@@ -176,7 +175,7 @@ levels(sample_data(phy)$Trial)
 ```
 
 #### Step3. Make plots for number of reads
-###### Generates a bar plot with # of reads (y-axis) for each taxa. Sorted from most to least abundant
+###### Generates a bar plot with  number of reads (y-axis) for each taxa. Sorted from most to least abundant
 
 ```{r}
 p.reads = ggplot(readsumsdf, aes(x = sorted, y = nreads)) +
@@ -240,13 +239,13 @@ get_taxa_unique(ps2, "Phylum")
 #### Step 6: Data Subsetting
 ###### All samples
 ```{r}
-# Trial6
+# Subset data by Trial6
 ps2.T6 <- subset_samples(ps2, Trial == "Trial6")
 any(taxa_sums(ps2.T6) == 0) # In this case it is TRUE, so remove the zero's
 ps2.T6 <- prune_taxa(taxa_sums(ps2.T6) > 0, ps2.T6)
 any(taxa_sums(ps2.T6) == 0) # It should now be false
 
-# Trial7
+# Subset data by Trial7
 ps2.T7 <- subset_samples(ps2, Trial == "Trial7")
 any(taxa_sums(ps2.T7) == 0) # In this case it is TRUE, so remove the zero's
 ps2.T7 <- prune_taxa(taxa_sums(ps2.T7) > 0, ps2.T7)
@@ -275,7 +274,7 @@ p.prevdf1
 
 ```
 #### Data transformations methods and plots
-Many analysis in community ecology benefit from data transformation. Many microbiome data sets do not fit to a normal distribution, but transforming them towards normality may enable more appropriate data for specific statistical tests. The choice of transformation is not straight forward. 
+Many analysis in community ecology benefit from data transformation. Many microbiome data sets do not fit to a normal distribution, but transforming them towards normality may enable more appropriate data for specific statistical tests.
 
 ###### Transform to Relative abundances
 
@@ -303,12 +302,13 @@ ggarrange(p.no.log, p.log, ncol = 2, labels = c("A)", "B)"))
 #### Rarefaction plot
 ##### We can plot the rarefaction curve for the observed ASVs in the entire data set. This is a way to check the richness captured in the sequencing effort.
 ```{r}
-Raf <-ggrare(ps2, step = 50, color="Name",  se = TRUE)
+Raf <-ggrare(ps2, step = 24, color="Name",  se = TRUE)
 ```
 ### Alpha diversity
-###### Alpha diversity is a standard tool researchers can use to calculate the number of bacterial taxa present in a study or study group and the relationships between relative abundance and how evenly taxa are distributed. These are classic representations of species number and diversity in a study which provide useful summary information about the numbers and relative abundances of bacterial taxa within the study.
 
-#Similar to the plot above, we can calculate several measures of alpha diversity, add them to a data frame and use ggplot2 to follow the alpha diversity trajectory over time.
+######Alpha diversity is a standard tool researchers can use to calculate the number of bacterial taxa present in a study or study group and the relationships between relative abundance and how evenly taxa are distributed. These are classic representations of species number and diversity in a study which provide useful summary information about the numbers and relative abundances of bacterial taxa within the study.
+
+#We can calculate several measures of alpha diversity, add them to a data frame and use ggplot2 to observe the different alpha diversity metrix.
 ```{r}
 SD <- sample_data(ps2) %>%
     data.frame() %>%
@@ -317,7 +317,6 @@ SD <- sample_data(ps2) %>%
 SD1 <- cbind(SampleID = rownames(SD ), SD)
 rownames(SD1 ) <- NULL
 All_S4_prune_rarefy <- rarefy_even_depth(ps2, rngseed= 81, sample.size = 10000)
-#Table1 <- otu_table(ps2)
 adiv <- data.frame(
   "Observed" = phyloseq::estimate_richness(All_S4_prune_rarefy, measures = "Observed"),
   "Shannon" = phyloseq::estimate_richness(All_S4_prune_rarefy, measures = "Shannon"),
@@ -449,7 +448,19 @@ NMDSplot_Hatchery
 ```
 
 #### Community composition plotting
-Classic bar plots of bacterial composition present in each sample can be useful for communicating results. These are relatively easy to interpret when major shifts in microbial communities are present, howeverthey are not effective at detecting subtle shifts in communities or taxa and do not convey any statistical significance. It is appropriate to subject these plots to further statistical analysis. 
+Classic bar plots of bacterial composition present in each sample can be useful for communicating results. These are relatively easy to interpret when major shifts in microbial communities are present, however, they are not effective at detecting subtle shifts in communities or taxa and do not convey any statistical significance. It is appropriate to subject these plots to further statistical analysis. 
+
+#### Calculate number of reads and add it to the meta table
+```
+sample_sum_df <- data.frame(sum = sample_sums(ps2 ))
+sum(sample_sum_df[, 'sum'])
+
+Sample_reads <- cbind(SampleID = rownames(sample_sum_df), sample_sum_df)
+rownames(Sample_reads) <- NULL
+
+#Join all the data
+Meta_T <-full_join(meta_table1, Sample_reads)
+```
 
 ##### Plot by Phylum 
 
@@ -492,7 +503,6 @@ Order1d_count$Type <- as.character(Order1d_count$Type)
 Order_plot <- ggplot(Order1d_count)+
   geom_col(mapping = aes(x = SampleID, y = Value, fill = Taxa), position = "fill", show.legend = TRUE)+
   ylab("Percent Phylum Abundance") +
-  # facet_wrap(. ~ProjectName+Type, scales = "free_x") +
   theme(strip.background = element_rect(colour="black", size=1))+
   theme(strip.text.x = element_text(size=30,face="bold"))+
   facet_grid(.~Name+Treatment+Type, drop=TRUE,scale="free", space="free",switch="x")+
@@ -633,7 +643,7 @@ There are a number of ways to detect bacterial taxa (more accurately, ASVs) diff
 ```
 xt <- transform(ps2, 'hellinger')
 #Orderabundance <- xt %>% tax_glom(taxrank = "Order")
-deres <- diff_analysis(obj =xt, classgroup = "ProjectName",
+deres <- diff_analysis(obj =xt, classgroup = "Trial",
                        mlfun = "lda",alltax = FALSE,
                        filtermod = "pvalue",
                        firstcomfun = "kruskal_test",
